@@ -4,6 +4,9 @@ require 'rails'
 module Aperio
   class Engine < Rails::Engine
 
+    #set our engine name
+    engine_name :aperio
+
     #set our mount point
     config.mount_at = '/'
 
