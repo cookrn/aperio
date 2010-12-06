@@ -1,0 +1,10 @@
+development:
+  repo: db/repos/development.git
+test: &test
+  repo: db/repos/test.git  
+production:
+  repo: db/repos/production.git
+daily:
+  repo: db/repos/daily.git
+cucumber:
+  <<: *test
