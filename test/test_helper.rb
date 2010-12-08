@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] = "test"
 ENV["RAILS_ROOT"] = File.expand_path("../dummy",  __FILE__)
 
 # Load the rails dummy app
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require "dummy/config/environment"
 require "rails/test_help"
 
 # Configure the dummy rails app
