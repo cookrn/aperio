@@ -26,11 +26,32 @@ class Aperio::OauthControllerTest < ActionController::TestCase
     parameters = {
       :client_id => 'a_client_id',
       :redirect_uri => 'http://example.com/callback',
-      :response_type => 'a_response_type',
+      :response_type => 'code',
       :state => 'a_client_state_identifier'
     }
     get :index , parameters
     assert_equal parameters[:state] , session[:aperio]['oauth_request_state']
+  end
+
+  # Test that our state parameter is included in a redirect if present
+  test 'state parameter is included in redirect' do
+    parameters = {
+      :redirect_uri => 'http://example.com/callback',
+      :state => 'a_client_state_identifier'
+    }
+    get :index , parameters
+    assert_redirected_to "#{parameters[:redirect_uri]}?state=#{parameters[:state]}"
+  end
+
+  # Test that we get redirected with the appropriate error code if an invalid response_type is passed in
+  test 'redirect if invalid response_type' do
+    parameters = {
+      :client_id => 'a_client_id',
+      :redirect_uri => 'http://example.com/callback',
+      :response_type => 'bad_response_type'
+    }
+    get :index , parameters
+    assert_redirected_to "#{parameters[:redirect_uri]}&error=unsupported-response-type"
   end
 
   # Test that posting nothing will return the appropriate error response
