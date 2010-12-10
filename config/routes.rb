@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
 
-  #scope our routes to the engine
-  scope :module => "aperio" do
-    match '/oauth/authorize', :to => 'oauth#authorize', :as => :oauth_authorize, :via => :post
-    match '/oauth/request_token', :to => 'oauth#request_token', :as => :oauth_request_token
-    match '/oauth/access_token', :to => 'oauth#access_token', :as => :oauth_access_token
-    match '/oauth/token', :to => 'oauth#token', :as => :oauth_token
+  # This adds our engine's routes to the host rails application scoped to our engine module
+  scope :module => :aperio do
+
+    # Add our HTTP GET only index route that a client will direct a user to
+    match "#{Aperio.route_namespace}", :to => 'oauth#index', :as => :aperio_oauth_index, :via => :get
+
+    # Add our HTTP POST only authenticate route that the authentication form will post to
+    match "#{Aperio.route_namespace}/authenticate", :to => 'oauth#authenticate', :as => :aperio_oauth_authenticate, :via => :post
+
   end
 
 end
