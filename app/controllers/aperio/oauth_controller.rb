@@ -22,13 +22,12 @@ module Aperio
     # @return [NilClass]
     def persist_client_state
 
-      # Check if the state param exists
-      if !params[:state].nil? && params[:state] != ''
+      # Setup a session hash that can be utilized
+      session[:aperio] = {}
 
-        # Setup a session hash that can be utilized
-        session[:aperio] ||= {}
-        session[:aperio]['oauth_request_state'] = params[:state]
-
+      # Persist each parameter to the session
+      params.each do |k,v|
+        session[:aperio][k] = v
       end
 
     end
@@ -75,14 +74,22 @@ module Aperio
         flash[:error] = "Required client parameters are missing."
       else
 
-        # Loop through our required keys to check for each one
-        required_oauth_parameters.each do |key|
+        # Prepare to rescue from an exception
+        begin
 
-          # Redirect if we are missing a required parameter
-          unless params.keys.include? key
-            redirect_to proper_error_redirect_uri('invalid-request')
-            break
+          # Loop through our required keys to check for each one
+          required_oauth_parameters.each do |key|
+
+            # Raise an exception if we are missing a required parameter
+            unless params.keys.include? key
+              raise Aperio::Oauth::InvalidAuthorizationRequestException.new(key)
+              break
+            end
+
           end
+
+        # Use the exception to generate the error query string
+        rescue InvalidOauthAuthorizationRequestException => e
 
         end
 
