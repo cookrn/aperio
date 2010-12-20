@@ -23,10 +23,10 @@ class Aperio::OauthControllerTest < ActionController::TestCase
       :state => 'a_client_state'
     }
     get :index , parameters
-    assert_equal parameters[:redirect_uri] , session[:aperio][:redirect_uri]
-    assert_equal parameters[:response_type] , session[:aperio][:response_type]
-    assert_equal parameters[:client_id] , session[:aperio][:client_id]
-    assert_equal parameters[:state] , session[:aperio][:state]
+    assert_equal parameters[:redirect_uri] , session[:aperio][:authorization_request]["redirect_uri"]
+    assert_equal parameters[:response_type] , session[:aperio][:authorization_request]["response_type"]
+    assert_equal parameters[:client_id] , session[:aperio][:authorization_request]["client_id"]
+    assert_equal parameters[:state] , session[:aperio][:authorization_request]["state"]
   end
 
   # Test that a request with a request with partial parameters including ONLY a redirect_uri redirects

@@ -1,4 +1,3 @@
-require 'aperio'
 require 'rails'
 
 module Aperio

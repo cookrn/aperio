@@ -4,6 +4,21 @@ module Aperio
 
     class RedirectUri
 
+      attr_accessor :base
+
+      def initialize(&blk)
+        yield self
+        construct
+      end
+
+      def append
+
+      end
+
+      def construct
+
+      end
+
       # Construct a full/proper redirect uri including any additions
       #
       # @param [String] The error type to respond with

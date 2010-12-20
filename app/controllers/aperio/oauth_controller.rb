@@ -56,16 +56,27 @@ module Aperio
           # Loop through our required keys to check for each one
           required_oauth_parameters.each do |key|
 
-            # Raise an exception if we are missing a required parameter
+            # Check if our parameters include our key
             unless params.keys.include? key
+
+              # Raise an exception if we are missing a required parameter
               raise Aperio::Exceptions::InvalidAuthorizationRequestException.new(key)
+
+              # End the loop if we are missing at least one required parameter
               break
+
             end
 
           end
 
         # Use the exception to generate the error query string
         rescue Aperio::Exceptions::InvalidAuthorizationRequestException => e
+
+          redirect_to Aperio::Helpers::RedirectUri.new do |uri|
+            uri.base = session[:aperio][:authorization_request]["redirect_uri"]
+            uri.append e.error_query_string
+            uri.append session[:aperio][:authorization_request].select { |key,val| !( required_oauth_parameters.include key.to_sym ) }
+          end
 
         end
 
