@@ -1,6 +1,11 @@
+# Get access to mattr_* methods
 require 'active_support/dependencies'
 
 module Aperio
+
+  # Autoloads
+  autoload :Exceptions , 'aperio/exceptions'
+  autoload :Helpers, 'aperio/helpers'
 
   # Set our route namespace
   mattr_accessor :route_namespace
@@ -18,12 +23,13 @@ module Aperio
   mattr_accessor :authentication_secret
   @@authentication_secret = "password"
 
-  #config yields self
+  # Config yields self
   def self.setup
     yield self
   end
 
-end
+  # Requires
+  require 'aperio/engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
 
-require 'aperio/engine' if defined?(Rails) && Rails::VERSION::MAJOR == 3
+end
 
