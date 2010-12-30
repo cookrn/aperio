@@ -29,11 +29,24 @@ class Aperio::OauthControllerTest < ActionController::TestCase
     assert_equal parameters[:state] , session[:aperio][:authorization_request]["state"]
   end
 
-  # Test that a request with a request with partial parameters including ONLY a redirect_uri redirects
+  # Test that a request with partial parameters including a redirect_uri redirects
   test 'index redirects to redirect_uri if other required parameters are missing' do
-    parameters = { :redirect_uri => 'http://example.com/callback' }
+    parameters = {
+      :redirect_uri => 'http://example.com/callback',
+      :state => 'a_client_state'
+    }
     get :index , parameters
-    assert_redirected_to parameters[:redirect_uri]
+    assert_redirected_to "#{parameters[:redirect_uri]}?error=invalid-request&state=a_client_state"
+  end
+
+  # Test that an invalid request that already includes a query string still redirects properly
+  test 'index redirects properly to redirect_uri that already includes query string' do
+    parameters = {
+      :redirect_uri => 'http://example.com/callback?query_string_key=query_string_value',
+      :state => 'a_client_state'
+    }
+    get :index , parameters
+    assert_redirected_to "#{parameters[:redirect_uri]}&error=invalid-request&state=a_client_state"
   end
 
   # Test that posting nothing will return the appropriate error response

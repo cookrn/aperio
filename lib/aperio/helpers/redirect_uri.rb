@@ -5,43 +5,44 @@ module Aperio
     class RedirectUri
 
       attr_accessor :base
+      attr_reader :appensions , :uri
 
-      def initialize(&blk)
+      # Standard class init
+      #
+      # @return [String] the full redirect uri
+      def initialize
+        @appensions = []
         yield self
         construct
       end
 
-      def append
-
+      # Pass in a key and value to append to append this in the redirect query string
+      #
+      # @param [String] A query string key/value pair
+      # @return [NilClass]
+      def append( appension )
+        appensions << appension
       end
 
-      def construct
-
-      end
+      private
 
       # Construct a full/proper redirect uri including any additions
       #
-      # @param [String] The error type to respond with
-      # @param [String] An optional error description
-      # @return [String] The full redirect_uri with all appropriate data
-      def proper_error_redirect_uri( error_type , error_description = nil )
-        full_redirect_uri = params[:redirect_uri]
+      # @return [String] The full redirect_uri with all the appropriate data
+      def construct
+        @uri = "#{proper_base}#{appensions.join('&')}"
+      end
 
-        # Check whether our redirect uri already has a query string and start our query string appropriately
-        #
+      # Check whether our base already has a query string and return appropriately
+      #
+      # @return [String] Our base redirect URI
+      def proper_base
         # The regex used matches the following sample urls
         # http://thing.thing.example.com/callback.thing/other_thing?sample_param=x&other_param=y
         # app://thing.thing.example.com/callback.thing/other_thing?sample_param=x
         # app://app.x/callback.thing/other_thing?sample_param=x&other_param=y
         # app://app_handler/callback.thing/other_thing?sample_param=x&other_param=y
-        full_redirect_uri << ( full_redirect_uri =~ /\w+:\/\/.+?(\.\w+)?\/.*?\?.+/ ) ? '&' : '?'
-
-        # Add on our data
-        full_redirect_uri << "error=#{error_type}"
-        full_redirect_uri << "&error_description=" unless error_description.nil?
-        full_redirect_uri << "&state=#{session[:aperio]['oauth_request_state']}" unless session[:aperio]['oauth_request_state'].nil?
-
-        full_redirect_uri
+        ( base =~ /\w+:\/\/.+?(\.\w+)?\/.*?\?.+/ ) ? "#{base}&" : "#{base}?"
       end
 
     end
@@ -49,3 +50,4 @@ module Aperio
   end
 
 end
+

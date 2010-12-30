@@ -1,4 +1,5 @@
 module Aperio
+
   class OauthController < ActionController::Base
 
     # HTTP POST Only
@@ -17,6 +18,9 @@ module Aperio
 
     private
 
+    # Params keys to always ignore for authorization requests
+    IGNORED_AUTHORIZATION_REQUEST_KEYS = [ "controller" , "action" ]
+
     # Persist the passed in client state parameter to the session
     #
     # @return [NilClass]
@@ -28,7 +32,7 @@ module Aperio
 
       # Persist each parameter to the session
       params.each do |k,v|
-        session[:aperio][:authorization_request][k] = v
+        session[:aperio][:authorization_request][k] = v unless IGNORED_AUTHORIZATION_REQUEST_KEYS.include?(k)
       end
 
     end
@@ -60,7 +64,7 @@ module Aperio
             unless params.keys.include? key
 
               # Raise an exception if we are missing a required parameter
-              raise Aperio::Exceptions::InvalidAuthorizationRequestException.new(key)
+              raise Aperio::Exceptions::InvalidAuthorizationRequestException.new( :invalid_request , key )
 
               # End the loop if we are missing at least one required parameter
               break
@@ -72,11 +76,17 @@ module Aperio
         # Use the exception to generate the error query string
         rescue Aperio::Exceptions::InvalidAuthorizationRequestException => e
 
-          redirect_to Aperio::Helpers::RedirectUri.new do |uri|
+          go = Aperio::Helpers::RedirectUri.new do |uri|
             uri.base = session[:aperio][:authorization_request]["redirect_uri"]
             uri.append e.error_query_string
-            uri.append session[:aperio][:authorization_request].select { |key,val| !( required_oauth_parameters.include key.to_sym ) }
+
+            # Only append key/value pairs to the redirect response that aren't in our required request params
+            session[:aperio][:authorization_request].select { |key,val| !( required_oauth_parameters.include? key.to_sym ) }.each do |key,val|
+              uri.append "#{key}=#{val}"
+            end
           end
+
+          redirect_to go.uri
 
         end
 
