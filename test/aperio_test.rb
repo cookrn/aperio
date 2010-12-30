@@ -20,7 +20,7 @@ class AperioTest < ActiveSupport::TestCase
     Aperio.setup do |config|
       config.route_namespace = test_namespace
     end
-    assert_equal Aperio.route_namespace , test_namespace
+    assert_equal test_namespace , Aperio.route_namespace
   end
 
   # Test that we are able to set a custom authentication model
@@ -29,7 +29,7 @@ class AperioTest < ActiveSupport::TestCase
     Aperio.setup do |config|
       config.authentication_model = test_authentication_model
     end
-    assert_equal Aperio.authentication_model , test_authentication_model
+    assert_equal test_authentication_model , Aperio.authentication_model
   end
 
   # Test that we are able to set a custom authentication identifier
@@ -38,7 +38,7 @@ class AperioTest < ActiveSupport::TestCase
     Aperio.setup do |config|
       config.authentication_identifier = test_authentication_identifier
     end
-    assert_equal Aperio.authentication_identifier , test_authentication_identifier
+    assert_equal test_authentication_identifier , Aperio.authentication_identifier
   end
 
   # Test that we are able to set a custom authentication secret
@@ -47,7 +47,16 @@ class AperioTest < ActiveSupport::TestCase
     Aperio.setup do |config|
       config.authentication_secret = test_authentication_secret
     end
-    assert_equal Aperio.authentication_secret , test_authentication_secret
+    assert_equal test_authentication_secret , Aperio.authentication_secret
+  end
+
+  # Test that we are able to set the allowed response types
+  test 'setting a custom array of allowed response types in the setup block' do
+    test_response_types = [ :code_and_token ]
+    Aperio.setup do |config|
+      config.allowed_response_types = test_response_types
+    end
+    assert_equal test_response_types , Aperio.allowed_response_types
   end
 
 end

@@ -1,6 +1,10 @@
 module Aperio
 
-  class OauthController < ActionController::Base
+  class OauthController < ApplicationController
+
+    # Filters
+    before_filter :persist_client_state , :only => [ :index ]
+    before_filter :verify_authorization_request , :only => [ :index ]
 
     # HTTP POST Only
     # Authenticates a user
@@ -11,10 +15,7 @@ module Aperio
 
     # HTTP GET Only
     # Displays the user authentication form
-    def index
-      persist_client_state
-      verify_required_oauth_parameters
-    end
+    def index; end
 
     private
 
@@ -35,6 +36,23 @@ module Aperio
         session[:aperio][:authorization_request][k] = v unless IGNORED_AUTHORIZATION_REQUEST_KEYS.include?(k)
       end
 
+    end
+
+    # Run all the checks on the authorization request before authenticating the User
+    def verify_authorization_request
+      verify_required_oauth_parameters
+      verify_response_type
+    end
+
+    # Check whether the server supports the requested response type
+    #
+    # @return [NilClass]
+    def verify_response_type
+      #begin
+        #response_type = session[:aperio][:authorization_request]["response_type"]
+        #raise Aperio::Exceptions::InvalidAuthorizationRequestException.new( :unsupported_response_type , response_type )
+      #rescue Aperio::Exceptions::InvalidAuthorizationRequestException => e
+      #end
     end
 
     # Ensure that we have the necessary oauth parameters to authenticate the user
