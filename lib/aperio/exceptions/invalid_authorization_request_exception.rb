@@ -8,7 +8,6 @@ module Aperio
     class InvalidAuthorizationRequestException < OAuth::Error
 
       attr_reader :error_type
-      @error_type = "invalid-request"
 
       # Acceptable error types
       POSSIBLE_TYPES = [ :invalid_request , :invalid_client_id , :unauthorized_client , :redirect_uri_mismatch , :access_denied , :unsupported_response_type , :invalid_scope ]
@@ -17,6 +16,7 @@ module Aperio
       #
       # @param [Symbol] The type of error
       def initialize( type , *args )
+        @error_type = "invalid-request"
         verify_type type
       end
 
