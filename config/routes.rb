@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     match "/", :to => 'oauth#index', :as => :oauth_index, :via => :get
 
     # Add our HTTP POST only authenticate route that the authentication form will post to
-    match "authenticate", :to => 'oauth#authenticate', :as => :oauth_authenticate, :via => :post
+    match "/", :to => 'oauth#authenticate', :as => :oauth_authenticate, :via => :post
 
   end
 

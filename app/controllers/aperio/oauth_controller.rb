@@ -82,7 +82,7 @@ module Aperio
             unless params.keys.include? key
 
               # Raise an exception if we are missing a required parameter
-              raise Aperio::Exceptions::InvalidAuthorizationRequestException.new( :invalid_request , key )
+              raise Aperio::Exceptions::InvalidAuthorizationRequestException.new( :invalid_request )
 
               # End the loop if we are missing at least one required parameter
               break

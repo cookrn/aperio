@@ -17,7 +17,7 @@ class DefaultRoutingTest < ActionController::TestCase
 
   # This tests the route that user credentials will be HTTP POSTed to to authenticate on the resource server
   test 'map oauth authenticate' do
-    assert_routing( { :path => "#{Aperio.route_namespace}/authenticate" , :method => :post } , { :controller => 'aperio/oauth' , :action => 'authenticate' } )
+    assert_routing( { :path => Aperio.route_namespace , :method => :post } , { :controller => 'aperio/oauth' , :action => 'authenticate' } )
   end
 
 end
