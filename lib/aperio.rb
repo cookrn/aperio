@@ -7,10 +7,6 @@ module Aperio
   autoload :Exceptions , 'aperio/exceptions'
   autoload :Helpers, 'aperio/helpers'
 
-  # Define the allowed response types
-  mattr_accessor :allowed_response_types
-  @@allowed_response_types = []
-
   # Define the authentication identifier
   mattr_accessor :authentication_identifier
   @@authentication_identifier = "email"
@@ -26,6 +22,10 @@ module Aperio
   # Set our route namespace
   mattr_accessor :route_namespace
   @@route_namespace = '/oauth'
+
+  # Set our supported response types
+  mattr_accessor :supported_response_types
+  @@supported_response_types = [ "code" , "token" ]
 
   # Config yields self
   def self.setup

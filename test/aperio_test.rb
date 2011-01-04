@@ -54,9 +54,9 @@ class AperioTest < ActiveSupport::TestCase
   test 'setting a custom array of allowed response types in the setup block' do
     test_response_types = [ :code_and_token ]
     Aperio.setup do |config|
-      config.allowed_response_types = test_response_types
+      config.supported_response_types = test_response_types
     end
-    assert_equal test_response_types , Aperio.allowed_response_types
+    assert_equal test_response_types , Aperio.supported_response_types
   end
 
 end

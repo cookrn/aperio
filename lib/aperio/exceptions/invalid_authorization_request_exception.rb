@@ -2,7 +2,7 @@ module Aperio
 
   module Exceptions
 
-    class InvalidAuthorizationRequestException < OAuth::Error
+    class InvalidAuthorizationRequestException < Aperio::Exceptions::BaseException
 
       attr_reader :error_type
 
