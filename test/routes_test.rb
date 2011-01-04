@@ -12,12 +12,12 @@ class DefaultRoutingTest < ActionController::TestCase
 
   # This tests the route that the user is sent to authorize a client's access to protected resources
   test 'map oauth index' do
-     assert_routing( { :path => Aperio.route_namespace , :method => :get } , { :controller => 'aperio/oauth' , :action => 'index' } )
+    assert_routing( { :path => Aperio.route_namespace , :method => :get } , { :controller => 'aperio/oauth_authorization' , :action => 'index' } )
   end
 
   # This tests the route that user credentials will be HTTP POSTed to to authenticate on the resource server
   test 'map oauth authenticate' do
-    assert_routing( { :path => Aperio.route_namespace , :method => :post } , { :controller => 'aperio/oauth' , :action => 'authenticate' } )
+    assert_routing( { :path => Aperio.route_namespace , :method => :post } , { :controller => 'aperio/oauth_authorization' , :action => 'authenticate' } )
   end
 
 end

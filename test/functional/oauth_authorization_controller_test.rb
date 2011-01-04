@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Aperio::OauthControllerTest < ActionController::TestCase
+class Aperio::OauthAuthorizationControllerTest < ActionController::TestCase
 
   # Test that our index route is accessible
   test 'index should be accessible' do
