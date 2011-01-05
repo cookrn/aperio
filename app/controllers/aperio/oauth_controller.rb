@@ -7,6 +7,7 @@ module Aperio
 
     # Filters
     before_filter :persist_client_state , :only => [ :index ]
+    before_filter :load_authentication_model, :only => [ :authenticate ]
     before_filter :verify_authorization_request , :only => [ :index ]
 
     # HTTP POST Only
@@ -20,7 +21,7 @@ module Aperio
     # Displays the user authentication form
     def index; end
 
-  end
+  end # class OauthAuthorizationController
 
-end
+end # module Aperio
 

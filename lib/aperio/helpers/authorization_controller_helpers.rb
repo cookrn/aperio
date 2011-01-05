@@ -7,6 +7,18 @@ module Aperio
       # Params keys to always ignore for authorization requests
       IGNORED_AUTHORIZATION_REQUEST_KEYS = [ "controller" , "action" ]
 
+      # Load our client and throw an exception and redirect if the client does not exist
+      #
+      # @return [NilClass]
+      def load_client
+        #unless @client = Aperio::Client.find_by_id params[:client_id]
+      end
+
+      # Load our authentication resource
+      #
+      # @return [NilClass]
+      def load_authentication_resource; end
+
       # Persist the passed in client state parameter to the session
       #
       # @return [NilClass]
@@ -23,11 +35,18 @@ module Aperio
 
       end
 
-      # Run all the checks on the authorization request before authenticating the User
+      # Run all the checks on the authorization request before authenticating the authorization resource
       def verify_authorization_request
         verify_required_oauth_parameters
         verify_response_type
+        load_client
+        verify_client
       end
+
+      # Check whether our client exists and is authorized
+      #
+      # @return [NilClass]
+      def verify_client; end
 
       # Check whether the server supports the requested response type
       #
@@ -39,6 +58,7 @@ module Aperio
             raise Aperio::Exceptions::InvalidAuthorizationRequestException.new( :unsupported_response_type )
           end
         rescue Aperio::Exceptions::InvalidAuthorizationRequestException => e
+          # @todo redirect or respond
         end
       end
 
@@ -97,11 +117,11 @@ module Aperio
 
         end
 
-      end
+      end # method verify_required_oauth_parameters
 
-    end
+    end # module AuthorizationControllerHelpers
 
-  end
+  end # module Helpers
 
-end
+end # module Aperio
 

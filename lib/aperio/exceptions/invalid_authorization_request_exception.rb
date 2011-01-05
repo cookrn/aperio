@@ -28,9 +28,9 @@ module Aperio
         "error=#{@error_type}"
       end
 
-    end
+    end # class InvalidAuthorizationRequestException
 
-  end
+  end # module Exceptions
 
-end
+end # module Aperio
 
