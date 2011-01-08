@@ -2,7 +2,7 @@ require 'bundler'
 require 'rake/testtask'
 Bundler::GemHelper.install_tasks
 
-desc 'Unit Rests'
+desc 'Unit Tests'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
